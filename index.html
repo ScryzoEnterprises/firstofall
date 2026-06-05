@@ -6,24 +6,28 @@
             name="viewport"
             content="width=device-width, initial-scale=1.0, user-scalable=no"
         />
-        <title>▰ NEBULA MACHINA ▰ FUTURISTIC COSMIC CORE</title>
+        <title>✦ HYPERION ✦ | ULTIMATE FUTURISTIC MATRIX</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
         <style>
-            body {
+            * {
                 margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                user-select: none;
+            }
+
+            body {
+                font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+                background: #000000;
                 overflow: hidden;
-                font-family:
-                    "Segoe UI",
-                    "Orbitron",
-                    "Avenir Next",
-                    system-ui,
-                    -apple-system,
-                    "Inter",
-                    sans-serif;
+                height: 100vh;
                 color: #eef5ff;
             }
 
-            /* canvas 3D background */
-            #cosmic-canvas {
+            canvas#universe {
                 position: fixed;
                 top: 0;
                 left: 0;
@@ -33,8 +37,7 @@
                 z-index: 0;
             }
 
-            /* HUD / UI Overlay */
-            .hud {
+            .hud-layer {
                 position: absolute;
                 z-index: 20;
                 width: 100%;
@@ -42,69 +45,62 @@
                 pointer-events: none;
             }
 
-            /* голографические панели */
-            .glass-panel {
-                background: rgba(5, 15, 35, 0.55);
-                backdrop-filter: blur(12px);
-                border-radius: 28px;
-                border: 1px solid rgba(0, 180, 255, 0.4);
+            /* glassmorphic panels */
+            .glass {
+                background: rgba(4, 12, 28, 0.65);
+                backdrop-filter: blur(14px);
+                border-radius: 32px;
+                border: 1px solid rgba(0, 200, 255, 0.3);
                 box-shadow:
-                    0 20px 40px rgba(0, 0, 0, 0.4),
-                    0 0 20px rgba(0, 160, 255, 0.2);
+                    0 25px 45px rgba(0, 0, 0, 0.4),
+                    0 0 30px rgba(0, 150, 255, 0.15);
                 pointer-events: auto;
             }
 
-            .top-bar {
+            .top-header {
                 position: absolute;
-                top: 24px;
-                left: 24px;
-                right: 24px;
+                top: 22px;
+                left: 22px;
+                right: 22px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 flex-wrap: wrap;
-                gap: 14px;
-                padding: 12px 28px;
+                gap: 16px;
+                padding: 14px 28px;
                 z-index: 30;
             }
 
-            .logo-area h1 {
-                font-size: 1.6rem;
-                letter-spacing: 4px;
-                font-weight: 500;
-                background: linear-gradient(120deg, #fff, #70b8ff, #b87cff);
+            .logo h1 {
+                font-size: 1.7rem;
+                font-weight: 700;
+                letter-spacing: -0.5px;
+                background: linear-gradient(135deg, #ffffff, #60a0ff, #c880ff);
                 -webkit-background-clip: text;
                 background-clip: text;
                 color: transparent;
-                margin: 0;
             }
 
-            .stats {
+            .badge-group {
                 display: flex;
                 gap: 28px;
-                font-size: 0.8rem;
+                font-size: 0.75rem;
                 font-weight: 500;
                 font-family: monospace;
             }
 
-            .live-badge {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
-            .pulse-dot {
+            .pulse-led {
                 width: 10px;
                 height: 10px;
                 background: #0f0;
                 border-radius: 50%;
                 box-shadow: 0 0 12px #0f0;
-                animation: pulseLive 1.2s infinite;
+                animation: pulseAnim 1.4s infinite;
             }
 
-            @keyframes pulseLive {
+            @keyframes pulseAnim {
                 0% {
-                    opacity: 0.4;
+                    opacity: 0.3;
                     transform: scale(0.7);
                 }
                 100% {
@@ -113,202 +109,214 @@
                 }
             }
 
-            /* главная панель управления */
-            .control-nexus {
+            /* main dashboard grid */
+            .dashboard {
                 position: absolute;
-                bottom: 30px;
-                left: 30px;
-                right: 30px;
-                display: flex;
-                flex-wrap: wrap;
+                bottom: 24px;
+                left: 24px;
+                right: 24px;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
                 gap: 20px;
-                justify-content: space-between;
-                align-items: flex-end;
                 pointer-events: none;
             }
 
             .card {
-                background: rgba(2, 10, 25, 0.7);
+                background: rgba(2, 10, 28, 0.7);
                 backdrop-filter: blur(16px);
                 border-radius: 28px;
                 padding: 20px;
-                border: 1px solid rgba(0, 200, 255, 0.35);
-                pointer-events: auto;
+                border: 1px solid rgba(60, 160, 255, 0.4);
                 transition: 0.2s;
-                min-width: 220px;
+                pointer-events: auto;
             }
 
             .card-title {
                 font-size: 0.7rem;
                 text-transform: uppercase;
                 letter-spacing: 3px;
-                margin-bottom: 10px;
-                color: #90c0ff;
+                margin-bottom: 12px;
+                color: #90ccff;
             }
 
-            .big-number {
-                font-size: 2rem;
+            .big-digit {
+                font-size: 2.2rem;
                 font-weight: 700;
                 font-family: monospace;
             }
 
+            .row-flex {
+                display: flex;
+                gap: 18px;
+                margin: 15px 0;
+                flex-wrap: wrap;
+            }
+
             button {
-                background: linear-gradient(95deg, #0f2f55, #031a38);
-                border: 1px solid #3a80bb;
-                padding: 12px 26px;
+                background: linear-gradient(95deg, #0f2f55, #041e3a);
+                border: 1px solid #3e84bb;
+                padding: 10px 20px;
                 border-radius: 60px;
                 color: white;
-                font-weight: bold;
+                font-weight: 600;
                 cursor: pointer;
-                backdrop-filter: blur(4px);
-                transition: 0.2s;
                 font-family: monospace;
+                transition: 0.2s;
             }
 
             button:hover {
-                background: #1f4980;
+                background: #1f4a78;
                 border-color: #7abfff;
-                box-shadow: 0 0 15px #0080ff60;
-            }
-
-            .interactive-grid {
-                display: flex;
-                gap: 20px;
-                flex-wrap: wrap;
-                margin-top: 15px;
-            }
-
-            .status-led-group {
-                display: flex;
-                gap: 18px;
-                margin-top: 12px;
-            }
-
-            .led {
-                width: 12px;
-                height: 12px;
-                border-radius: 50%;
-                background: #2ecc71;
-                box-shadow: 0 0 8px #2ecc71;
+                box-shadow: 0 0 12px #0080ff60;
             }
 
             input,
             textarea {
-                background: #021c3a;
-                border: 1px solid #2c6699;
+                background: #031b3a;
+                border: 1px solid #2e6a99;
                 border-radius: 60px;
                 padding: 8px 16px;
                 color: white;
                 width: 100%;
-                margin-top: 8px;
+                margin: 6px 0;
             }
 
-            canvas#audio-viz {
+            .inline-stats {
+                display: flex;
+                gap: 18px;
+                margin-top: 12px;
+                font-size: 0.75rem;
+            }
+
+            canvas.viz {
                 width: 100%;
-                height: 60px;
-                border-radius: 16px;
-                background: #03112a;
+                height: 70px;
+                background: #010a1a;
+                border-radius: 18px;
                 margin-top: 12px;
             }
 
-            @media (max-width: 800px) {
-                .top-bar {
-                    flex-direction: column;
-                    align-items: stretch;
-                }
-                .stats {
-                    justify-content: space-between;
-                }
-                .control-nexus {
-                    flex-direction: column;
-                    align-items: stretch;
-                    bottom: 20px;
-                    left: 20px;
-                    right: 20px;
+            @media (max-width: 780px) {
+                .dashboard {
+                    grid-template-columns: 1fr;
+                    bottom: 16px;
+                    left: 16px;
+                    right: 16px;
                     gap: 14px;
+                }
+                .top-header {
+                    flex-direction: column;
+                    align-items: stretch;
                 }
             }
         </style>
     </head>
     <body>
-        <canvas id="cosmic-canvas"></canvas>
-        <div class="hud">
-            <div class="top-bar glass-panel">
-                <div class="logo-area">
-                    <h1>NEBULA MACHINA</h1>
-                    <div style="font-size: 9px; letter-spacing: 2px">
-                        ✦ QUANTUM CORE v.∞ ✦
+        <canvas id="universe"></canvas>
+        <div class="hud-layer">
+            <div class="top-header glass">
+                <div class="logo">
+                    <h1>✧ HYPERION CORE ✧</h1>
+                    <div style="font-size: 8px; letter-spacing: 2px">
+                        QUANTUM NEXUS v.∞
                     </div>
                 </div>
-                <div class="stats">
-                    <div class="live-badge">
-                        <div class="pulse-dot"></div>
-                        LIVE STREAM
+                <div class="badge-group">
+                    <div class="pulse-led"></div>
+                    <div>FPS: <span id="fpsCounter">—</span></div>
+                    <div>
+                        PARTICLES: <span id="particleCountDisplay">0</span>
                     </div>
-                    <div>FPS: <span id="fpsMeter">—</span></div>
-                    <div>PARTICLES: <span id="particleCount">0</span></div>
-                    <div id="discordStatusMini" class="live-badge">
-                        DISCORD: ONLINE
-                    </div>
+                    <div id="discordLive">DISC: ONLINE</div>
                 </div>
             </div>
 
-            <div class="control-nexus">
-                <div class="card" style="flex: 1.5">
-                    <div class="card-title">🌀 VOICE OF NEBULA (SYNTH)</div>
-                    <div class="interactive-grid">
-                        <button id="noteC">C4</button>
-                        <button id="noteD">D4</button>
-                        <button id="noteE">E4</button>
-                        <button id="noteF">F4</button>
-                        <button id="noteG">G4</button>
-                        <button id="noteA">A4</button>
-                        <button id="noteB">B4</button>
-                        <button id="playArp">ARP MODE</button>
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-title">🎛️ AUDIO REACTOR (SYNTH)</div>
+                    <div class="row-flex">
+                        <button id="noteC4">C4</button
+                        ><button id="noteD4">D4</button
+                        ><button id="noteE4">E4</button>
+                        <button id="noteF4">F4</button
+                        ><button id="noteG4">G4</button
+                        ><button id="noteA4">A4</button>
+                        <button id="noteB4">B4</button>
+                        <button id="arpToggle">ARP MODE</button>
                     </div>
-                    <canvas id="audio-viz" width="400" height="50"></canvas>
-                    <div style="margin-top: 8px; font-size: 11px">
-                        experimental synth – web audio api
+                    <canvas
+                        id="audioVisualizer"
+                        class="viz"
+                        width="400"
+                        height="70"
+                    ></canvas>
+                    <div class="inline-stats">
+                        <span>⚡ WAVE ENGINE</span
+                        ><span id="synthStatus">READY</span>
                     </div>
                 </div>
 
-                <div class="card" style="flex: 1">
-                    <div class="card-title">🌌 QUANTUM STATISTICS</div>
-                    <div class="big-number" id="quantumFlux">98.72%</div>
-                    <div class="status-led-group">
+                <div class="card">
+                    <div class="card-title">🌌 QUANTUM METRICS</div>
+                    <div class="big-digit" id="quantumValue">98.73%</div>
+                    <div class="inline-stats">
                         <div>
-                            <div class="led" style="background: #0f0"></div>
-                            CORE STABLE
+                            <div
+                                style="
+                                    width: 8px;
+                                    height: 8px;
+                                    background: #0f0;
+                                    border-radius: 50%;
+                                    display: inline-block;
+                                "
+                            ></div>
+                            STABILITY
                         </div>
-                        <div>
-                            <div class="led" style="background: #0af"></div>
-                            WARP ACTIVE
-                        </div>
+                        <div>UPTIME: <span id="uptimeSpan">0h 0m</span></div>
                     </div>
-                    <div>UPTIME: <span id="uptimeClock">0h 0m 0s</span></div>
+                    <div class="inline-stats">
+                        MEM: <span id="memUsage">—</span> MB &nbsp;|&nbsp; WARP:
+                        ACTIVE
+                    </div>
+                    <canvas
+                        id="spectrumCanvas"
+                        class="viz"
+                        width="400"
+                        height="40"
+                    ></canvas>
                 </div>
 
-                <div class="card" style="flex: 1.2">
-                    <div class="card-title">📡 DISCORD WEBHOOK TRANSMITTER</div>
+                <div class="card">
+                    <div class="card-title">📡 WEBHOOK INTERFACE</div>
                     <input
                         type="text"
-                        id="webhookUrl"
-                        placeholder="webhook url"
+                        id="webhookUrlField"
+                        placeholder="Webhook URL"
                         value="https://discordapp.com/api/webhooks/1508124936244302075/Jp3Akejx3rtzxNLJOPWhq8m4GxQR86bZc9PX9A_B4LdPT_8kTFHn_wddMK-RoYqzzJW0"
                     />
                     <textarea
-                        id="webhookMsg"
-                        rows="1"
-                        placeholder="message to cosmos"
-                        style="border-radius: 20px"
+                        id="webhookMsgField"
+                        rows="2"
+                        placeholder="Message to hyperion"
                     ></textarea>
-                    <button id="sendWebhookBtn" style="margin-top: 8px">
-                        ⟁ SEND TO DISCORD
-                    </button>
+                    <button id="sendWebhookAction">⟁ TRANSMIT</button>
                     <div
-                        id="webhookResponse"
+                        id="webhookFeedback"
                         style="font-size: 11px; margin-top: 8px"
                     ></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">🎮 INTERACTIVE MATRIX</div>
+                    <div class="row-flex">
+                        <button id="btnParticles">PARTICLE BURST</button>
+                        <button id="btnColorShift">CHROMATIC WARP</button>
+                    </div>
+                    <div>LAST EVENT: <span id="eventLog">IDLE</span></div>
+                    <div class="inline-stats">
+                        CORE TEMP: <span id="coreTemp">36.2</span>°C
+                        &nbsp;|&nbsp; NEXUS FLUX
+                    </div>
                 </div>
             </div>
         </div>
@@ -324,190 +332,181 @@
         <script type="module">
             import * as THREE from "three";
 
-            // ----------------------- 3D КОСМИЧЕСКАЯ СЦЕНА (максимальная красота) -----------------------
-            const canvas = document.getElementById("cosmic-canvas");
+            // ------------------------------------------------------------------
+            // 1. ULTRA DETAILED 3D SPACE SCENE (THREE.JS)
+            // ------------------------------------------------------------------
+            const canvasElem = document.getElementById("universe");
             const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x010008);
-            scene.fog = new THREE.FogExp2(0x010008, 0.0006);
+            scene.background = new THREE.Color(0x01000a);
+            scene.fog = new THREE.FogExp2(0x01000a, 0.0005);
 
             const camera = new THREE.PerspectiveCamera(
-                55,
+                52,
                 window.innerWidth / window.innerHeight,
                 0.1,
                 1000,
             );
-            camera.position.set(0, 2.2, 15);
+            camera.position.set(0, 2.0, 16);
             camera.lookAt(0, 0, -4);
 
             const renderer = new THREE.WebGLRenderer({
-                canvas,
-                alpha: false,
+                canvas: canvasElem,
                 antialias: true,
+                alpha: false,
             });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.shadowMap.enabled = true;
 
-            // звездное поле с анимацией
-            const starCount = 3200;
-            const starGeo = new THREE.BufferGeometry();
-            const starPos = new Float32Array(starCount * 3);
+            // starfield
+            const starCount = 4200;
+            const starGeometry = new THREE.BufferGeometry();
+            const starPositions = new Float32Array(starCount * 3);
             for (let i = 0; i < starCount; i++) {
-                starPos[i * 3] = (Math.random() - 0.5) * 400;
-                starPos[i * 3 + 1] = (Math.random() - 0.5) * 200;
-                starPos[i * 3 + 2] = (Math.random() - 0.5) * 120 - 60;
+                starPositions[i * 3] = (Math.random() - 0.5) * 500;
+                starPositions[i * 3 + 1] = (Math.random() - 0.5) * 280;
+                starPositions[i * 3 + 2] = (Math.random() - 0.5) * 150 - 60;
             }
-            starGeo.setAttribute(
+            starGeometry.setAttribute(
                 "position",
-                new THREE.BufferAttribute(starPos, 3),
+                new THREE.BufferAttribute(starPositions, 3),
             );
-            const starMat = new THREE.PointsMaterial({
+            const starMaterial = new THREE.PointsMaterial({
                 color: 0xffffff,
-                size: 0.12,
+                size: 0.13,
                 transparent: true,
                 opacity: 0.7,
             });
-            const stars = new THREE.Points(starGeo, starMat);
-            scene.add(stars);
+            const starsField = new THREE.Points(starGeometry, starMaterial);
+            scene.add(starsField);
 
-            // центральная парящая сфера (ядро)
+            // central hyperion core
             const coreMat = new THREE.MeshStandardMaterial({
-                color: 0x3a86ff,
-                emissive: 0x1155aa,
+                color: 0x4a8eff,
+                emissive: 0x2266cc,
                 roughness: 0.2,
-                metalness: 0.9,
+                metalness: 0.85,
             });
-            const coreSphere = new THREE.Mesh(
-                new THREE.SphereGeometry(1.2, 128, 128),
+            const hyperCore = new THREE.Mesh(
+                new THREE.SphereGeometry(1.3, 128, 128),
                 coreMat,
             );
-            coreSphere.position.set(2.2, -0.8, -5);
-            scene.add(coreSphere);
+            hyperCore.position.set(2.5, -0.9, -6);
+            scene.add(hyperCore);
 
-            const glowMat = new THREE.MeshBasicMaterial({
-                color: 0x2288ff,
-                transparent: true,
-                opacity: 0.15,
-            });
-            const aura = new THREE.Mesh(
-                new THREE.SphereGeometry(1.5, 32, 32),
-                glowMat,
-            );
-            coreSphere.add(aura);
-
-            // вращающиеся кольца
-            const ringGeoBig = new THREE.TorusGeometry(1.8, 0.07, 128, 300);
-            const ringMatBig = new THREE.MeshStandardMaterial({
-                color: 0x88ccff,
-                emissive: 0x2266aa,
-            });
-            const ring1 = new THREE.Mesh(ringGeoBig, ringMatBig);
-            ring1.rotation.x = Math.PI / 2.3;
-            ring1.rotation.z = 0.7;
-            coreSphere.add(ring1);
-
-            const ring2 = new THREE.Mesh(
-                new THREE.TorusGeometry(2.1, 0.05, 128, 300),
+            const ringMain = new THREE.Mesh(
+                new THREE.TorusGeometry(1.9, 0.09, 128, 320),
                 new THREE.MeshStandardMaterial({
-                    color: 0xffaa66,
+                    color: 0x88ccff,
+                    emissive: 0x2288aa,
+                }),
+            );
+            ringMain.rotation.x = Math.PI / 2.2;
+            ringMain.rotation.z = 0.6;
+            hyperCore.add(ringMain);
+
+            const ringSecondary = new THREE.Mesh(
+                new THREE.TorusGeometry(2.2, 0.07, 128, 320),
+                new THREE.MeshStandardMaterial({
+                    color: 0xffaa77,
                     emissive: 0x552200,
                 }),
             );
-            ring2.rotation.x = 1.2;
-            ring2.rotation.z = 0.4;
-            coreSphere.add(ring2);
+            ringSecondary.rotation.x = 1.1;
+            ringSecondary.rotation.z = 0.4;
+            hyperCore.add(ringSecondary);
 
-            // вторая планета (газовый гигант)
+            // second planet
             const gasGiant = new THREE.Mesh(
-                new THREE.SphereGeometry(1.0, 96, 96),
+                new THREE.SphereGeometry(1.05, 96, 96),
                 new THREE.MeshStandardMaterial({
                     color: 0xcc8866,
                     emissive: 0x442200,
-                    roughness: 0.6,
+                    roughness: 0.55,
                 }),
             );
-            gasGiant.position.set(-3.5, 1.4, -7);
+            gasGiant.position.set(-3.8, 1.2, -7.5);
             scene.add(gasGiant);
 
-            // маленькие луны
-            const moonMatSmall = new THREE.MeshStandardMaterial({
-                color: 0xaa9988,
-            });
-            const moon1 = new THREE.Mesh(
-                new THREE.SphereGeometry(0.32, 48, 48),
-                moonMatSmall,
+            // orbiting moon
+            const moon = new THREE.Mesh(
+                new THREE.SphereGeometry(0.38, 64, 64),
+                new THREE.MeshStandardMaterial({ color: 0xaa9977 }),
             );
-            moon1.position.set(-1.2, -1.5, -3);
-            scene.add(moon1);
+            moon.position.set(-1.4, -1.6, -4);
+            scene.add(moon);
 
-            // туманность частиц (облако)
-            const particleCountObj = 1800;
+            // particle nebula
+            const particleCount = 2800;
             const particleGeo = new THREE.BufferGeometry();
-            const particlePositions = new Float32Array(particleCountObj * 3);
-            for (let i = 0; i < particleCountObj; i++) {
-                particlePositions[i * 3] = (Math.random() - 0.5) * 35;
-                particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 18;
-                particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 20 - 8;
+            const particlePosArray = new Float32Array(particleCount * 3);
+            for (let i = 0; i < particleCount; i++) {
+                particlePosArray[i * 3] = (Math.random() - 0.5) * 45;
+                particlePosArray[i * 3 + 1] = (Math.random() - 0.5) * 22;
+                particlePosArray[i * 3 + 2] = (Math.random() - 0.5) * 25 - 10;
             }
             particleGeo.setAttribute(
                 "position",
-                new THREE.BufferAttribute(particlePositions, 3),
+                new THREE.BufferAttribute(particlePosArray, 3),
             );
-            const particleMat = new THREE.PointsMaterial({
+            const particleMaterial = new THREE.PointsMaterial({
                 color: 0x88aaff,
-                size: 0.05,
+                size: 0.07,
                 transparent: true,
-                opacity: 0.5,
                 blending: THREE.AdditiveBlending,
             });
-            const particleCloud = new THREE.Points(particleGeo, particleMat);
-            scene.add(particleCloud);
+            const nebulaParticles = new THREE.Points(
+                particleGeo,
+                particleMaterial,
+            );
+            scene.add(nebulaParticles);
+            document.getElementById("particleCountDisplay").innerText =
+                particleCount;
 
-            // освещение
-            const ambientLight = new THREE.AmbientLight(0x111122);
-            scene.add(ambientLight);
-            const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
-            mainLight.position.set(3, 5, 4);
-            scene.add(mainLight);
-            const fillLight = new THREE.PointLight(0x4488ff, 0.6);
-            fillLight.position.set(-2, 1, 3);
-            scene.add(fillLight);
-            const backRim = new THREE.PointLight(0xffaa66, 0.5);
-            backRim.position.set(0, 1, -5);
-            scene.add(backRim);
+            // lighting
+            const ambient = new THREE.AmbientLight(0x111133);
+            scene.add(ambient);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1.1);
+            dirLight.position.set(4, 5, 3);
+            scene.add(dirLight);
+            const pointBack = new THREE.PointLight(0x4488ff, 0.6);
+            pointBack.position.set(-2, 1, -6);
+            scene.add(pointBack);
+            const fillWarm = new THREE.PointLight(0xffaa66, 0.5);
+            fillWarm.position.set(2, 2, 4);
+            scene.add(fillWarm);
 
-            // анимация сцены
-            let time = 0;
-            function animateScene() {
-                requestAnimationFrame(animateScene);
-                time += 0.008;
-                stars.rotation.y += 0.0002;
-                stars.rotation.x += 0.0001;
-                coreSphere.rotation.y += 0.003;
-                ring1.rotation.z += 0.005;
-                ring2.rotation.x += 0.003;
+            let timeAnim = 0;
+            function animate3D() {
+                requestAnimationFrame(animate3D);
+                timeAnim += 0.007;
+                starsField.rotation.y += 0.00025;
+                starsField.rotation.x += 0.00012;
+                hyperCore.rotation.y += 0.0025;
+                ringMain.rotation.z += 0.004;
+                ringSecondary.rotation.x += 0.003;
                 gasGiant.rotation.y += 0.002;
-                particleCloud.rotation.y = Math.sin(time * 0.1) * 0.1;
-                moon1.position.x = -1.2 + Math.sin(time * 0.6) * 0.2;
-                camera.position.x += (0 - camera.position.x) * 0.02;
-                camera.lookAt(0, 0, -3.5);
+                nebulaParticles.rotation.y = Math.sin(timeAnim * 0.1) * 0.08;
+                moon.position.x = -1.4 + Math.sin(timeAnim * 0.5) * 0.22;
+                camera.position.x += (0 - camera.position.x) * 0.018;
+                camera.lookAt(0, 0, -3.8);
                 renderer.render(scene, camera);
-                document.getElementById("particleCount").innerText =
-                    particleCountObj;
             }
-            animateScene();
+            animate3D();
+
             window.addEventListener("resize", () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
             });
 
-            // ----------------------- WEB AUDIO SYNTH + ВИЗУАЛИЗАТОР -----------------------
-            let audioCtx = null;
-            let isArp = false;
-            let arpInterval;
-            const notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4"];
-            const frequencies = {
+            // ------------------------------------------------------------------
+            // 2. WEB AUDIO SYNTHESIZER + VISUALIZER
+            // ------------------------------------------------------------------
+            let audioContext = null;
+            let isArpActive = false;
+            let arpIntervalId = null;
+            const notesMap = {
                 C4: 261.63,
                 D4: 293.66,
                 E4: 329.63,
@@ -516,196 +515,265 @@
                 A4: 440.0,
                 B4: 493.88,
             };
-            let currentOsc = null;
-            let gainNode = null;
-            const vizCanvas = document.getElementById("audio-viz");
+            const noteList = ["C4", "D4", "E4", "F4", "G4", "A4", "B4"];
+            const vizCanvas = document.getElementById("audioVisualizer");
             const vizCtx = vizCanvas.getContext("2d");
 
-            function initAudio() {
-                if (audioCtx) return;
-                audioCtx = new (
+            function initAudioContext() {
+                if (audioContext) return;
+                audioContext = new (
                     window.AudioContext || window.webkitAudioContext
                 )();
-                gainNode = audioCtx.createGain();
-                gainNode.gain.value = 0.3;
-                gainNode.connect(audioCtx.destination);
             }
 
-            function playTone(freq, duration = 0.4) {
-                if (!audioCtx) initAudio();
-                if (currentOsc) {
-                    try {
-                        currentOsc.stop();
-                    } catch (e) {}
-                }
-                const osc = audioCtx.createOscillator();
+            function playTone(freq, duration = 0.45) {
+                if (!audioContext) initAudioContext();
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
                 osc.type = "sine";
                 osc.frequency.value = freq;
-                const gain = audioCtx.createGain();
-                gain.gain.value = 0.25;
+                gain.gain.value = 0.28;
                 osc.connect(gain);
-                gain.connect(audioCtx.destination);
+                gain.connect(audioContext.destination);
                 osc.start();
                 gain.gain.exponentialRampToValueAtTime(
-                    0.00001,
-                    audioCtx.currentTime + duration,
+                    0.0001,
+                    audioContext.currentTime + duration,
                 );
-                osc.stop(audioCtx.currentTime + duration);
+                osc.stop(audioContext.currentTime + duration);
 
-                // визуализация
-                let now = Date.now();
-                function drawViz() {
-                    if (Date.now() - now > 150) return;
-                    vizCtx.fillStyle = "#03112a";
+                let startViz = Date.now();
+                function animateViz() {
+                    if (Date.now() - startViz > 200) {
+                        vizCtx.fillStyle = "#010a1a";
+                        vizCtx.fillRect(
+                            0,
+                            0,
+                            vizCanvas.width,
+                            vizCanvas.height,
+                        );
+                        return;
+                    }
+                    vizCtx.fillStyle = "#010a1a";
                     vizCtx.fillRect(0, 0, vizCanvas.width, vizCanvas.height);
                     vizCtx.fillStyle = "#70ffcc";
-                    let h = 30 + Math.random() * 25;
+                    let height = 25 + Math.random() * 35;
                     vizCtx.fillRect(
                         0,
-                        vizCanvas.height / 2 - h / 2,
+                        vizCanvas.height / 2 - height / 2,
                         vizCanvas.width,
-                        h,
+                        height,
                     );
-                    requestAnimationFrame(drawViz);
+                    requestAnimationFrame(animateViz);
                 }
-                drawViz();
-                setTimeout(() => {
-                    vizCtx.fillStyle = "#03112a";
-                    vizCtx.fillRect(0, 0, vizCanvas.width, vizCanvas.height);
-                }, 200);
+                animateViz();
             }
 
-            document.getElementById("noteC").addEventListener("click", () => {
-                playTone(frequencies.C4);
-            });
-            document.getElementById("noteD").addEventListener("click", () => {
-                playTone(frequencies.D4);
-            });
-            document.getElementById("noteE").addEventListener("click", () => {
-                playTone(frequencies.E4);
-            });
-            document.getElementById("noteF").addEventListener("click", () => {
-                playTone(frequencies.F4);
-            });
-            document.getElementById("noteG").addEventListener("click", () => {
-                playTone(frequencies.G4);
-            });
-            document.getElementById("noteA").addEventListener("click", () => {
-                playTone(frequencies.A4);
-            });
-            document.getElementById("noteB").addEventListener("click", () => {
-                playTone(frequencies.B4);
-            });
+            document.getElementById("noteC4").onclick = () =>
+                playTone(notesMap.C4);
+            document.getElementById("noteD4").onclick = () =>
+                playTone(notesMap.D4);
+            document.getElementById("noteE4").onclick = () =>
+                playTone(notesMap.E4);
+            document.getElementById("noteF4").onclick = () =>
+                playTone(notesMap.F4);
+            document.getElementById("noteG4").onclick = () =>
+                playTone(notesMap.G4);
+            document.getElementById("noteA4").onclick = () =>
+                playTone(notesMap.A4);
+            document.getElementById("noteB4").onclick = () =>
+                playTone(notesMap.B4);
 
-            const arpBtn = document.getElementById("playArp");
-            arpBtn.addEventListener("click", () => {
-                if (isArp) {
-                    clearInterval(arpInterval);
-                    isArp = false;
-                    arpBtn.textContent = "ARP MODE";
+            const arpBtn = document.getElementById("arpToggle");
+            arpBtn.onclick = () => {
+                if (isArpActive) {
+                    clearInterval(arpIntervalId);
+                    isArpActive = false;
+                    arpBtn.innerText = "ARP MODE";
+                    document.getElementById("synthStatus").innerHTML =
+                        "ARP OFF";
                 } else {
-                    initAudio();
+                    initAudioContext();
                     let idx = 0;
-                    arpInterval = setInterval(() => {
-                        const note = notes[idx % notes.length];
-                        playTone(frequencies[note], 0.25);
+                    arpIntervalId = setInterval(() => {
+                        const noteName = noteList[idx % noteList.length];
+                        playTone(notesMap[noteName], 0.26);
                         idx++;
                     }, 280);
-                    isArp = true;
-                    arpBtn.textContent = "■ STOP ARP";
+                    isArpActive = true;
+                    arpBtn.innerText = "■ STOP ARP";
+                    document.getElementById("synthStatus").innerHTML =
+                        "ARP ACTIVE";
                 }
-            });
+            };
 
-            // ----------------------- DISCORD WEBHOOK -----------------------
-            const webhookUrlInput = document.getElementById("webhookUrl");
-            const webhookMsg = document.getElementById("webhookMsg");
-            const sendBtn = document.getElementById("sendWebhookBtn");
-            const webhookResponseDiv =
-                document.getElementById("webhookResponse");
-            sendBtn.addEventListener("click", async () => {
+            // spectrum canvas animation (fake spectrum)
+            const spectrumCanvas = document.getElementById("spectrumCanvas");
+            const specCtx = spectrumCanvas.getContext("2d");
+            function drawSpectrum() {
+                specCtx.fillStyle = "#010a1a";
+                specCtx.fillRect(
+                    0,
+                    0,
+                    spectrumCanvas.width,
+                    spectrumCanvas.height,
+                );
+                for (let i = 0; i < 28; i++) {
+                    let h =
+                        5 +
+                        Math.sin(Date.now() * 0.005 + i * 0.5) * 12 +
+                        Math.random() * 6;
+                    specCtx.fillStyle = `hsl(${180 + i * 3}, 80%, 60%)`;
+                    specCtx.fillRect(i * 14, spectrumCanvas.height - h, 8, h);
+                }
+                requestAnimationFrame(drawSpectrum);
+            }
+            drawSpectrum();
+
+            // ------------------------------------------------------------------
+            // 3. DISCORD WEBHOOK + STATUS
+            // ------------------------------------------------------------------
+            const webhookUrlInput = document.getElementById("webhookUrlField");
+            const webhookMsgInput = document.getElementById("webhookMsgField");
+            const sendWebhook = document.getElementById("sendWebhookAction");
+            const feedbackDiv = document.getElementById("webhookFeedback");
+            sendWebhook.onclick = async () => {
                 const url = webhookUrlInput.value.trim();
-                const msg = webhookMsg.value.trim();
+                const msg = webhookMsgInput.value.trim();
                 if (!msg) {
-                    webhookResponseDiv.innerText = "Enter message";
+                    feedbackDiv.innerText = "Empty message";
                     return;
                 }
                 try {
-                    const response = await fetch(url, {
+                    const res = await fetch(url, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
-                            content: `**NEBULA MACHINA** ✦ ${msg}`,
-                            username: "Nebula Core",
+                            content: `**HYPERION CORE** ✦ ${msg}`,
+                            username: "Hyperion Nexus",
                         }),
                     });
-                    if (response.ok) {
-                        webhookResponseDiv.innerText =
-                            "✓ Transmitted to cosmos";
-                        webhookMsg.value = "";
-                    } else {
-                        webhookResponseDiv.innerText = "Webhook error";
-                    }
-                } catch (e) {
-                    webhookResponseDiv.innerText = "Network error";
-                }
-            });
-
-            // ----------------------- FPS + UPTIME + QUANTUM + DISCORD STATUS -----------------------
-            let frameCount = 0,
-                lastTimeFP = performance.now();
-            function measureFPS() {
-                frameCount++;
-                const now = performance.now();
-                if (now - lastTimeFP >= 1000) {
-                    const fps = Math.round(
-                        (frameCount * 1000) / (now - lastTimeFP),
-                    );
-                    document.getElementById("fpsMeter").innerText = fps;
-                    frameCount = 0;
-                    lastTimeFP = now;
-                }
-                requestAnimationFrame(measureFPS);
-            }
-            measureFPS();
-
-            let startUptime = Date.now();
-            setInterval(() => {
-                let sec = Math.floor((Date.now() - startUptime) / 1000);
-                let h = Math.floor(sec / 3600),
-                    m = Math.floor((sec % 3600) / 60),
-                    s = sec % 60;
-                document.getElementById("uptimeClock").innerText =
-                    `${h}h ${m}m ${s}s`;
-                const flux = 98 + Math.sin(Date.now() / 4000) * 1.2;
-                document.getElementById("quantumFlux").innerHTML =
-                    flux.toFixed(2) + "%";
-            }, 500);
-
-            // имитация Discord статуса через Lanyard (реальный)
-            async function fetchDiscord() {
-                try {
-                    const res = await fetch(
-                        `https://api.lanyard.rest/v1/users/1480944222633984082`,
-                    );
                     if (res.ok) {
-                        const json = await res.json();
-                        const status = json.data.discord_status.toUpperCase();
-                        document.getElementById("discordStatusMini").innerHTML =
-                            `DISCORD: ${status}`;
+                        feedbackDiv.innerText = "✓ transmitted";
+                        webhookMsgInput.value = "";
                     } else {
-                        document.getElementById("discordStatusMini").innerHTML =
-                            `DISCORD: ONLINE`;
+                        feedbackDiv.innerText = "webhook error";
                     }
                 } catch (e) {
-                    document.getElementById("discordStatusMini").innerHTML =
-                        `DISCORD: ACTIVE`;
+                    feedbackDiv.innerText = "network error";
+                }
+            };
+
+            async function updateDiscordStatus() {
+                try {
+                    const resp = await fetch(
+                        "https://api.lanyard.rest/v1/users/1480944222633984082",
+                    );
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        const stat = data.data.discord_status.toUpperCase();
+                        document.getElementById("discordLive").innerHTML =
+                            `DISC: ${stat}`;
+                    } else {
+                        document.getElementById("discordLive").innerHTML =
+                            `DISC: ONLINE`;
+                    }
+                } catch (e) {
+                    document.getElementById("discordLive").innerHTML =
+                        `DISC: ACTIVE`;
                 }
             }
-            fetchDiscord();
-            setInterval(fetchDiscord, 18000);
+            updateDiscordStatus();
+            setInterval(updateDiscordStatus, 17000);
 
-            // дополнительные эстетические эффекты перелива чисел
-            console.log("NEBULA MACHINA — full futuristic core online");
+            // ------------------------------------------------------------------
+            // 4. METRICS & INTERACTIONS
+            // ------------------------------------------------------------------
+            let startTime = Date.now();
+            setInterval(() => {
+                let sec = Math.floor((Date.now() - startTime) / 1000);
+                let h = Math.floor(sec / 3600),
+                    m = Math.floor((sec % 3600) / 60);
+                document.getElementById("uptimeSpan").innerHTML = `${h}h ${m}m`;
+                let quantum = 98.2 + Math.sin(Date.now() / 3800) * 1.1;
+                document.getElementById("quantumValue").innerHTML =
+                    quantum.toFixed(2) + "%";
+                let temp = 36 + Math.sin(Date.now() / 5000) * 1.2;
+                document.getElementById("coreTemp").innerHTML = temp.toFixed(1);
+                if (performance.memory) {
+                    let mem = Math.round(
+                        performance.memory.usedJSHeapSize / 1048576,
+                    );
+                    document.getElementById("memUsage").innerHTML = mem;
+                }
+            }, 800);
+
+            let frameCnt = 0,
+                lastFrameTime = performance.now();
+            function fpsMeter() {
+                frameCnt++;
+                const now = performance.now();
+                if (now - lastFrameTime >= 1000) {
+                    let fps = Math.round(
+                        (frameCnt * 1000) / (now - lastFrameTime),
+                    );
+                    document.getElementById("fpsCounter").innerHTML = fps;
+                    frameCnt = 0;
+                    lastFrameTime = now;
+                }
+                requestAnimationFrame(fpsMeter);
+            }
+            fpsMeter();
+
+            // particle burst effect (three.js)
+            document.getElementById("btnParticles").onclick = () => {
+                const burstGeo = new THREE.BufferGeometry();
+                const burstPos = [];
+                for (let i = 0; i < 300; i++) {
+                    burstPos.push((Math.random() - 0.5) * 5);
+                    burstPos.push((Math.random() - 0.5) * 5);
+                    burstPos.push((Math.random() - 0.5) * 5 - 2);
+                }
+                burstGeo.setAttribute(
+                    "position",
+                    new THREE.BufferAttribute(new Float32Array(burstPos), 3),
+                );
+                const burstMat = new THREE.PointsMaterial({
+                    color: 0xffaa66,
+                    size: 0.08,
+                    transparent: true,
+                });
+                const burstPoints = new THREE.Points(burstGeo, burstMat);
+                burstPoints.position.copy(hyperCore.position);
+                scene.add(burstPoints);
+                setTimeout(() => scene.remove(burstPoints), 400);
+                document.getElementById("eventLog").innerHTML =
+                    "PARTICLE BURST";
+                setTimeout(
+                    () =>
+                        (document.getElementById("eventLog").innerHTML =
+                            "IDLE"),
+                    1200,
+                );
+            };
+
+            document.getElementById("btnColorShift").onclick = () => {
+                const newColor = Math.floor(Math.random() * 0xffffff);
+                coreMat.color.setHex(newColor);
+                document.getElementById("eventLog").innerHTML =
+                    "CHROMATIC WARP";
+                setTimeout(
+                    () =>
+                        (document.getElementById("eventLog").innerHTML =
+                            "IDLE"),
+                    1000,
+                );
+            };
+
+            // extra dummy console
+            console.log(
+                "HYPERION CORE: all systems operational | 3D + Audio + Webhook + Metrics",
+            );
         </script>
     </body>
 </html>
