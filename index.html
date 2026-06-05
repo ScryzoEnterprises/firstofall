@@ -1,779 +1,92 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
     <head>
         <meta charset="UTF-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, user-scalable=no"
-        />
-        <title>✦ HYPERION ✦ | ULTIMATE FUTURISTIC MATRIX</title>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap"
-            rel="stylesheet"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Моё первое приложение</title>
         <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                user-select: none;
-            }
-
+            /* Настройки для всего экрана (делаем темный фон и центрируем карточку) */
             body {
-                font-family: "Inter", "Segoe UI", system-ui, sans-serif;
-                background: #000000;
-                overflow: hidden;
+                margin: 0;
                 height: 100vh;
-                color: #eef5ff;
-            }
-
-            canvas#universe {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                display: block;
-                z-index: 0;
-            }
-
-            .hud-layer {
-                position: absolute;
-                z-index: 20;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-            }
-
-            /* glassmorphic panels */
-            .glass {
-                background: rgba(4, 12, 28, 0.65);
-                backdrop-filter: blur(14px);
-                border-radius: 32px;
-                border: 1px solid rgba(0, 200, 255, 0.3);
-                box-shadow:
-                    0 25px 45px rgba(0, 0, 0, 0.4),
-                    0 0 30px rgba(0, 150, 255, 0.15);
-                pointer-events: auto;
-            }
-
-            .top-header {
-                position: absolute;
-                top: 22px;
-                left: 22px;
-                right: 22px;
                 display: flex;
-                justify-content: space-between;
+                justify-content: center;
                 align-items: center;
-                flex-wrap: wrap;
-                gap: 16px;
-                padding: 14px 28px;
-                z-index: 30;
+                background-color: #121214;
+                font-family: sans-serif;
+                color: #ffffff;
             }
 
-            .logo h1 {
-                font-size: 1.7rem;
-                font-weight: 700;
-                letter-spacing: -0.5px;
-                background: linear-gradient(135deg, #ffffff, #60a0ff, #c880ff);
-                -webkit-background-clip: text;
-                background-clip: text;
-                color: transparent;
-            }
-
-            .badge-group {
-                display: flex;
-                gap: 28px;
-                font-size: 0.75rem;
-                font-weight: 500;
-                font-family: monospace;
-            }
-
-            .pulse-led {
-                width: 10px;
-                height: 10px;
-                background: #0f0;
-                border-radius: 50%;
-                box-shadow: 0 0 12px #0f0;
-                animation: pulseAnim 1.4s infinite;
-            }
-
-            @keyframes pulseAnim {
-                0% {
-                    opacity: 0.3;
-                    transform: scale(0.7);
-                }
-                100% {
-                    opacity: 1;
-                    transform: scale(1.2);
-                }
-            }
-
-            /* main dashboard grid */
-            .dashboard {
-                position: absolute;
-                bottom: 24px;
-                left: 24px;
-                right: 24px;
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-                gap: 20px;
-                pointer-events: none;
-            }
-
+            /* Стиль для нашей карточки */
             .card {
-                background: rgba(2, 10, 28, 0.7);
-                backdrop-filter: blur(16px);
-                border-radius: 28px;
-                padding: 20px;
-                border: 1px solid rgba(60, 160, 255, 0.4);
-                transition: 0.2s;
-                pointer-events: auto;
+                background-color: #202024;
+                padding: 30px;
+                border-radius: 12px;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+                text-align: center;
+                max-width: 400px;
+                width: 100%;
             }
 
-            .card-title {
-                font-size: 0.7rem;
-                text-transform: uppercase;
-                letter-spacing: 3px;
-                margin-bottom: 12px;
-                color: #90ccff;
+            /* Стиль текста */
+            #quote-text {
+                font-size: 1.2rem;
+                line-height: 1.5;
+                margin-bottom: 25px;
+                min-height: 60px; /* Чтобы карточка не прыгала от разной длины текста */
             }
 
-            .big-digit {
-                font-size: 2.2rem;
-                font-weight: 700;
-                font-family: monospace;
-            }
-
-            .row-flex {
-                display: flex;
-                gap: 18px;
-                margin: 15px 0;
-                flex-wrap: wrap;
-            }
-
-            button {
-                background: linear-gradient(95deg, #0f2f55, #041e3a);
-                border: 1px solid #3e84bb;
-                padding: 10px 20px;
-                border-radius: 60px;
+            /* Стиль интерактивной кнопки */
+            #quote-btn {
+                background-color: #8257e5;
                 color: white;
-                font-weight: 600;
+                border: none;
+                padding: 12px 24px;
+                font-size: 1rem;
+                border-radius: 6px;
                 cursor: pointer;
-                font-family: monospace;
-                transition: 0.2s;
+                transition: background 0.2s;
             }
 
-            button:hover {
-                background: #1f4a78;
-                border-color: #7abfff;
-                box-shadow: 0 0 12px #0080ff60;
-            }
-
-            input,
-            textarea {
-                background: #031b3a;
-                border: 1px solid #2e6a99;
-                border-radius: 60px;
-                padding: 8px 16px;
-                color: white;
-                width: 100%;
-                margin: 6px 0;
-            }
-
-            .inline-stats {
-                display: flex;
-                gap: 18px;
-                margin-top: 12px;
-                font-size: 0.75rem;
-            }
-
-            canvas.viz {
-                width: 100%;
-                height: 70px;
-                background: #010a1a;
-                border-radius: 18px;
-                margin-top: 12px;
-            }
-
-            @media (max-width: 780px) {
-                .dashboard {
-                    grid-template-columns: 1fr;
-                    bottom: 16px;
-                    left: 16px;
-                    right: 16px;
-                    gap: 14px;
-                }
-                .top-header {
-                    flex-direction: column;
-                    align-items: stretch;
-                }
+            /* Эффект при наведении мыши на кнопку */
+            #quote-btn:hover {
+                background-color: #9466ff;
             }
         </style>
     </head>
     <body>
-        <canvas id="universe"></canvas>
-        <div class="hud-layer">
-            <div class="top-header glass">
-                <div class="logo">
-                    <h1>✧ HYPERION CORE ✧</h1>
-                    <div style="font-size: 8px; letter-spacing: 2px">
-                        QUANTUM NEXUS v.∞
-                    </div>
-                </div>
-                <div class="badge-group">
-                    <div class="pulse-led"></div>
-                    <div>FPS: <span id="fpsCounter">—</span></div>
-                    <div>
-                        PARTICLES: <span id="particleCountDisplay">0</span>
-                    </div>
-                    <div id="discordLive">DISC: ONLINE</div>
-                </div>
-            </div>
-
-            <div class="dashboard">
-                <div class="card">
-                    <div class="card-title">🎛️ AUDIO REACTOR (SYNTH)</div>
-                    <div class="row-flex">
-                        <button id="noteC4">C4</button
-                        ><button id="noteD4">D4</button
-                        ><button id="noteE4">E4</button>
-                        <button id="noteF4">F4</button
-                        ><button id="noteG4">G4</button
-                        ><button id="noteA4">A4</button>
-                        <button id="noteB4">B4</button>
-                        <button id="arpToggle">ARP MODE</button>
-                    </div>
-                    <canvas
-                        id="audioVisualizer"
-                        class="viz"
-                        width="400"
-                        height="70"
-                    ></canvas>
-                    <div class="inline-stats">
-                        <span>⚡ WAVE ENGINE</span
-                        ><span id="synthStatus">READY</span>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">🌌 QUANTUM METRICS</div>
-                    <div class="big-digit" id="quantumValue">98.73%</div>
-                    <div class="inline-stats">
-                        <div>
-                            <div
-                                style="
-                                    width: 8px;
-                                    height: 8px;
-                                    background: #0f0;
-                                    border-radius: 50%;
-                                    display: inline-block;
-                                "
-                            ></div>
-                            STABILITY
-                        </div>
-                        <div>UPTIME: <span id="uptimeSpan">0h 0m</span></div>
-                    </div>
-                    <div class="inline-stats">
-                        MEM: <span id="memUsage">—</span> MB &nbsp;|&nbsp; WARP:
-                        ACTIVE
-                    </div>
-                    <canvas
-                        id="spectrumCanvas"
-                        class="viz"
-                        width="400"
-                        height="40"
-                    ></canvas>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">📡 WEBHOOK INTERFACE</div>
-                    <input
-                        type="text"
-                        id="webhookUrlField"
-                        placeholder="Webhook URL"
-                        value="https://discordapp.com/api/webhooks/1508124936244302075/Jp3Akejx3rtzxNLJOPWhq8m4GxQR86bZc9PX9A_B4LdPT_8kTFHn_wddMK-RoYqzzJW0"
-                    />
-                    <textarea
-                        id="webhookMsgField"
-                        rows="2"
-                        placeholder="Message to hyperion"
-                    ></textarea>
-                    <button id="sendWebhookAction">⟁ TRANSMIT</button>
-                    <div
-                        id="webhookFeedback"
-                        style="font-size: 11px; margin-top: 8px"
-                    ></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">🎮 INTERACTIVE MATRIX</div>
-                    <div class="row-flex">
-                        <button id="btnParticles">PARTICLE BURST</button>
-                        <button id="btnColorShift">CHROMATIC WARP</button>
-                    </div>
-                    <div>LAST EVENT: <span id="eventLog">IDLE</span></div>
-                    <div class="inline-stats">
-                        CORE TEMP: <span id="coreTemp">36.2</span>°C
-                        &nbsp;|&nbsp; NEXUS FLUX
-                    </div>
-                </div>
-            </div>
+        <!-- Карточка по центру экрана -->
+        <div class="card">
+            <p id="quote-text">
+                Нажмите кнопку, чтобы получить предсказание на сегодня!
+            </p>
+            <button id="quote-btn">Получить</button>
         </div>
+        <script>
+            // 1. Создаем массив (список) фраз, которые будут меняться
+            const phrases = [
+                "Код работает? Не трогай.",
+                "Сегодня идеальный день, чтобы завалить прод.",
+                "Ошибки в консоли — это просто мнение твоего компьютера.",
+                "Семь раз отмерь, один раз закомить.",
+                "Фронтенд — это искусство делать красиво там, где сзади всё держится на костылях.",
+            ];
 
-        <script type="importmap">
-            {
-                "imports": {
-                    "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
-                }
-            }
-        </script>
+            // 2. Находим элементы на странице по их ID, чтобы JS мог ими управлять
+            const textElement = document.getElementById("quote-text");
+            const buttonElement = document.getElementById("quote-btn");
 
-        <script type="module">
-            import * as THREE from "three";
+            // 3. Создаем функцию, которая выбирает случайную фразу и вставляет её в текст
+            function changeQuote() {
+                // Магия математики: выбираем случайный индекс из нашего списка фраз
+                const randomIndex = Math.floor(Math.random() * phrases.length);
 
-            // ------------------------------------------------------------------
-            // 1. ULTRA DETAILED 3D SPACE SCENE (THREE.JS)
-            // ------------------------------------------------------------------
-            const canvasElem = document.getElementById("universe");
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x01000a);
-            scene.fog = new THREE.FogExp2(0x01000a, 0.0005);
-
-            const camera = new THREE.PerspectiveCamera(
-                52,
-                window.innerWidth / window.innerHeight,
-                0.1,
-                1000,
-            );
-            camera.position.set(0, 2.0, 16);
-            camera.lookAt(0, 0, -4);
-
-            const renderer = new THREE.WebGLRenderer({
-                canvas: canvasElem,
-                antialias: true,
-                alpha: false,
-            });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.shadowMap.enabled = true;
-
-            // starfield
-            const starCount = 4200;
-            const starGeometry = new THREE.BufferGeometry();
-            const starPositions = new Float32Array(starCount * 3);
-            for (let i = 0; i < starCount; i++) {
-                starPositions[i * 3] = (Math.random() - 0.5) * 500;
-                starPositions[i * 3 + 1] = (Math.random() - 0.5) * 280;
-                starPositions[i * 3 + 2] = (Math.random() - 0.5) * 150 - 60;
-            }
-            starGeometry.setAttribute(
-                "position",
-                new THREE.BufferAttribute(starPositions, 3),
-            );
-            const starMaterial = new THREE.PointsMaterial({
-                color: 0xffffff,
-                size: 0.13,
-                transparent: true,
-                opacity: 0.7,
-            });
-            const starsField = new THREE.Points(starGeometry, starMaterial);
-            scene.add(starsField);
-
-            // central hyperion core
-            const coreMat = new THREE.MeshStandardMaterial({
-                color: 0x4a8eff,
-                emissive: 0x2266cc,
-                roughness: 0.2,
-                metalness: 0.85,
-            });
-            const hyperCore = new THREE.Mesh(
-                new THREE.SphereGeometry(1.3, 128, 128),
-                coreMat,
-            );
-            hyperCore.position.set(2.5, -0.9, -6);
-            scene.add(hyperCore);
-
-            const ringMain = new THREE.Mesh(
-                new THREE.TorusGeometry(1.9, 0.09, 128, 320),
-                new THREE.MeshStandardMaterial({
-                    color: 0x88ccff,
-                    emissive: 0x2288aa,
-                }),
-            );
-            ringMain.rotation.x = Math.PI / 2.2;
-            ringMain.rotation.z = 0.6;
-            hyperCore.add(ringMain);
-
-            const ringSecondary = new THREE.Mesh(
-                new THREE.TorusGeometry(2.2, 0.07, 128, 320),
-                new THREE.MeshStandardMaterial({
-                    color: 0xffaa77,
-                    emissive: 0x552200,
-                }),
-            );
-            ringSecondary.rotation.x = 1.1;
-            ringSecondary.rotation.z = 0.4;
-            hyperCore.add(ringSecondary);
-
-            // second planet
-            const gasGiant = new THREE.Mesh(
-                new THREE.SphereGeometry(1.05, 96, 96),
-                new THREE.MeshStandardMaterial({
-                    color: 0xcc8866,
-                    emissive: 0x442200,
-                    roughness: 0.55,
-                }),
-            );
-            gasGiant.position.set(-3.8, 1.2, -7.5);
-            scene.add(gasGiant);
-
-            // orbiting moon
-            const moon = new THREE.Mesh(
-                new THREE.SphereGeometry(0.38, 64, 64),
-                new THREE.MeshStandardMaterial({ color: 0xaa9977 }),
-            );
-            moon.position.set(-1.4, -1.6, -4);
-            scene.add(moon);
-
-            // particle nebula
-            const particleCount = 2800;
-            const particleGeo = new THREE.BufferGeometry();
-            const particlePosArray = new Float32Array(particleCount * 3);
-            for (let i = 0; i < particleCount; i++) {
-                particlePosArray[i * 3] = (Math.random() - 0.5) * 45;
-                particlePosArray[i * 3 + 1] = (Math.random() - 0.5) * 22;
-                particlePosArray[i * 3 + 2] = (Math.random() - 0.5) * 25 - 10;
-            }
-            particleGeo.setAttribute(
-                "position",
-                new THREE.BufferAttribute(particlePosArray, 3),
-            );
-            const particleMaterial = new THREE.PointsMaterial({
-                color: 0x88aaff,
-                size: 0.07,
-                transparent: true,
-                blending: THREE.AdditiveBlending,
-            });
-            const nebulaParticles = new THREE.Points(
-                particleGeo,
-                particleMaterial,
-            );
-            scene.add(nebulaParticles);
-            document.getElementById("particleCountDisplay").innerText =
-                particleCount;
-
-            // lighting
-            const ambient = new THREE.AmbientLight(0x111133);
-            scene.add(ambient);
-            const dirLight = new THREE.DirectionalLight(0xffffff, 1.1);
-            dirLight.position.set(4, 5, 3);
-            scene.add(dirLight);
-            const pointBack = new THREE.PointLight(0x4488ff, 0.6);
-            pointBack.position.set(-2, 1, -6);
-            scene.add(pointBack);
-            const fillWarm = new THREE.PointLight(0xffaa66, 0.5);
-            fillWarm.position.set(2, 2, 4);
-            scene.add(fillWarm);
-
-            let timeAnim = 0;
-            function animate3D() {
-                requestAnimationFrame(animate3D);
-                timeAnim += 0.007;
-                starsField.rotation.y += 0.00025;
-                starsField.rotation.x += 0.00012;
-                hyperCore.rotation.y += 0.0025;
-                ringMain.rotation.z += 0.004;
-                ringSecondary.rotation.x += 0.003;
-                gasGiant.rotation.y += 0.002;
-                nebulaParticles.rotation.y = Math.sin(timeAnim * 0.1) * 0.08;
-                moon.position.x = -1.4 + Math.sin(timeAnim * 0.5) * 0.22;
-                camera.position.x += (0 - camera.position.x) * 0.018;
-                camera.lookAt(0, 0, -3.8);
-                renderer.render(scene, camera);
-            }
-            animate3D();
-
-            window.addEventListener("resize", () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-
-            // ------------------------------------------------------------------
-            // 2. WEB AUDIO SYNTHESIZER + VISUALIZER
-            // ------------------------------------------------------------------
-            let audioContext = null;
-            let isArpActive = false;
-            let arpIntervalId = null;
-            const notesMap = {
-                C4: 261.63,
-                D4: 293.66,
-                E4: 329.63,
-                F4: 349.23,
-                G4: 392.0,
-                A4: 440.0,
-                B4: 493.88,
-            };
-            const noteList = ["C4", "D4", "E4", "F4", "G4", "A4", "B4"];
-            const vizCanvas = document.getElementById("audioVisualizer");
-            const vizCtx = vizCanvas.getContext("2d");
-
-            function initAudioContext() {
-                if (audioContext) return;
-                audioContext = new (
-                    window.AudioContext || window.webkitAudioContext
-                )();
+                // Меняем текст на экране на случайную фразу
+                textElement.textContent = phrases[randomIndex];
             }
 
-            function playTone(freq, duration = 0.45) {
-                if (!audioContext) initAudioContext();
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-                osc.type = "sine";
-                osc.frequency.value = freq;
-                gain.gain.value = 0.28;
-                osc.connect(gain);
-                gain.connect(audioContext.destination);
-                osc.start();
-                gain.gain.exponentialRampToValueAtTime(
-                    0.0001,
-                    audioContext.currentTime + duration,
-                );
-                osc.stop(audioContext.currentTime + duration);
-
-                let startViz = Date.now();
-                function animateViz() {
-                    if (Date.now() - startViz > 200) {
-                        vizCtx.fillStyle = "#010a1a";
-                        vizCtx.fillRect(
-                            0,
-                            0,
-                            vizCanvas.width,
-                            vizCanvas.height,
-                        );
-                        return;
-                    }
-                    vizCtx.fillStyle = "#010a1a";
-                    vizCtx.fillRect(0, 0, vizCanvas.width, vizCanvas.height);
-                    vizCtx.fillStyle = "#70ffcc";
-                    let height = 25 + Math.random() * 35;
-                    vizCtx.fillRect(
-                        0,
-                        vizCanvas.height / 2 - height / 2,
-                        vizCanvas.width,
-                        height,
-                    );
-                    requestAnimationFrame(animateViz);
-                }
-                animateViz();
-            }
-
-            document.getElementById("noteC4").onclick = () =>
-                playTone(notesMap.C4);
-            document.getElementById("noteD4").onclick = () =>
-                playTone(notesMap.D4);
-            document.getElementById("noteE4").onclick = () =>
-                playTone(notesMap.E4);
-            document.getElementById("noteF4").onclick = () =>
-                playTone(notesMap.F4);
-            document.getElementById("noteG4").onclick = () =>
-                playTone(notesMap.G4);
-            document.getElementById("noteA4").onclick = () =>
-                playTone(notesMap.A4);
-            document.getElementById("noteB4").onclick = () =>
-                playTone(notesMap.B4);
-
-            const arpBtn = document.getElementById("arpToggle");
-            arpBtn.onclick = () => {
-                if (isArpActive) {
-                    clearInterval(arpIntervalId);
-                    isArpActive = false;
-                    arpBtn.innerText = "ARP MODE";
-                    document.getElementById("synthStatus").innerHTML =
-                        "ARP OFF";
-                } else {
-                    initAudioContext();
-                    let idx = 0;
-                    arpIntervalId = setInterval(() => {
-                        const noteName = noteList[idx % noteList.length];
-                        playTone(notesMap[noteName], 0.26);
-                        idx++;
-                    }, 280);
-                    isArpActive = true;
-                    arpBtn.innerText = "■ STOP ARP";
-                    document.getElementById("synthStatus").innerHTML =
-                        "ARP ACTIVE";
-                }
-            };
-
-            // spectrum canvas animation (fake spectrum)
-            const spectrumCanvas = document.getElementById("spectrumCanvas");
-            const specCtx = spectrumCanvas.getContext("2d");
-            function drawSpectrum() {
-                specCtx.fillStyle = "#010a1a";
-                specCtx.fillRect(
-                    0,
-                    0,
-                    spectrumCanvas.width,
-                    spectrumCanvas.height,
-                );
-                for (let i = 0; i < 28; i++) {
-                    let h =
-                        5 +
-                        Math.sin(Date.now() * 0.005 + i * 0.5) * 12 +
-                        Math.random() * 6;
-                    specCtx.fillStyle = `hsl(${180 + i * 3}, 80%, 60%)`;
-                    specCtx.fillRect(i * 14, spectrumCanvas.height - h, 8, h);
-                }
-                requestAnimationFrame(drawSpectrum);
-            }
-            drawSpectrum();
-
-            // ------------------------------------------------------------------
-            // 3. DISCORD WEBHOOK + STATUS
-            // ------------------------------------------------------------------
-            const webhookUrlInput = document.getElementById("webhookUrlField");
-            const webhookMsgInput = document.getElementById("webhookMsgField");
-            const sendWebhook = document.getElementById("sendWebhookAction");
-            const feedbackDiv = document.getElementById("webhookFeedback");
-            sendWebhook.onclick = async () => {
-                const url = webhookUrlInput.value.trim();
-                const msg = webhookMsgInput.value.trim();
-                if (!msg) {
-                    feedbackDiv.innerText = "Empty message";
-                    return;
-                }
-                try {
-                    const res = await fetch(url, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            content: `**HYPERION CORE** ✦ ${msg}`,
-                            username: "Hyperion Nexus",
-                        }),
-                    });
-                    if (res.ok) {
-                        feedbackDiv.innerText = "✓ transmitted";
-                        webhookMsgInput.value = "";
-                    } else {
-                        feedbackDiv.innerText = "webhook error";
-                    }
-                } catch (e) {
-                    feedbackDiv.innerText = "network error";
-                }
-            };
-
-            async function updateDiscordStatus() {
-                try {
-                    const resp = await fetch(
-                        "https://api.lanyard.rest/v1/users/1480944222633984082",
-                    );
-                    if (resp.ok) {
-                        const data = await resp.json();
-                        const stat = data.data.discord_status.toUpperCase();
-                        document.getElementById("discordLive").innerHTML =
-                            `DISC: ${stat}`;
-                    } else {
-                        document.getElementById("discordLive").innerHTML =
-                            `DISC: ONLINE`;
-                    }
-                } catch (e) {
-                    document.getElementById("discordLive").innerHTML =
-                        `DISC: ACTIVE`;
-                }
-            }
-            updateDiscordStatus();
-            setInterval(updateDiscordStatus, 17000);
-
-            // ------------------------------------------------------------------
-            // 4. METRICS & INTERACTIONS
-            // ------------------------------------------------------------------
-            let startTime = Date.now();
-            setInterval(() => {
-                let sec = Math.floor((Date.now() - startTime) / 1000);
-                let h = Math.floor(sec / 3600),
-                    m = Math.floor((sec % 3600) / 60);
-                document.getElementById("uptimeSpan").innerHTML = `${h}h ${m}m`;
-                let quantum = 98.2 + Math.sin(Date.now() / 3800) * 1.1;
-                document.getElementById("quantumValue").innerHTML =
-                    quantum.toFixed(2) + "%";
-                let temp = 36 + Math.sin(Date.now() / 5000) * 1.2;
-                document.getElementById("coreTemp").innerHTML = temp.toFixed(1);
-                if (performance.memory) {
-                    let mem = Math.round(
-                        performance.memory.usedJSHeapSize / 1048576,
-                    );
-                    document.getElementById("memUsage").innerHTML = mem;
-                }
-            }, 800);
-
-            let frameCnt = 0,
-                lastFrameTime = performance.now();
-            function fpsMeter() {
-                frameCnt++;
-                const now = performance.now();
-                if (now - lastFrameTime >= 1000) {
-                    let fps = Math.round(
-                        (frameCnt * 1000) / (now - lastFrameTime),
-                    );
-                    document.getElementById("fpsCounter").innerHTML = fps;
-                    frameCnt = 0;
-                    lastFrameTime = now;
-                }
-                requestAnimationFrame(fpsMeter);
-            }
-            fpsMeter();
-
-            // particle burst effect (three.js)
-            document.getElementById("btnParticles").onclick = () => {
-                const burstGeo = new THREE.BufferGeometry();
-                const burstPos = [];
-                for (let i = 0; i < 300; i++) {
-                    burstPos.push((Math.random() - 0.5) * 5);
-                    burstPos.push((Math.random() - 0.5) * 5);
-                    burstPos.push((Math.random() - 0.5) * 5 - 2);
-                }
-                burstGeo.setAttribute(
-                    "position",
-                    new THREE.BufferAttribute(new Float32Array(burstPos), 3),
-                );
-                const burstMat = new THREE.PointsMaterial({
-                    color: 0xffaa66,
-                    size: 0.08,
-                    transparent: true,
-                });
-                const burstPoints = new THREE.Points(burstGeo, burstMat);
-                burstPoints.position.copy(hyperCore.position);
-                scene.add(burstPoints);
-                setTimeout(() => scene.remove(burstPoints), 400);
-                document.getElementById("eventLog").innerHTML =
-                    "PARTICLE BURST";
-                setTimeout(
-                    () =>
-                        (document.getElementById("eventLog").innerHTML =
-                            "IDLE"),
-                    1200,
-                );
-            };
-
-            document.getElementById("btnColorShift").onclick = () => {
-                const newColor = Math.floor(Math.random() * 0xffffff);
-                coreMat.color.setHex(newColor);
-                document.getElementById("eventLog").innerHTML =
-                    "CHROMATIC WARP";
-                setTimeout(
-                    () =>
-                        (document.getElementById("eventLog").innerHTML =
-                            "IDLE"),
-                    1000,
-                );
-            };
-
-            // extra dummy console
-            console.log(
-                "HYPERION CORE: all systems operational | 3D + Audio + Webhook + Metrics",
-            );
+            // 4. Говорим кнопке: «Слушай клик мыши. Как только кликнут — запускай функцию changeQuote»
+            buttonElement.addEventListener("click", changeQuote);
         </script>
     </body>
 </html>
